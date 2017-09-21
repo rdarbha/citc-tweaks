@@ -1,0 +1,25 @@
+- name: Deploy CRoHDAd Container
+  docker_container:
+    name: crohdad
+    privileged: true
+    interactive: true
+    network_mode: host
+    restart_policy: unless-stopped
+    tty: true
+    recreate: yes
+    image: cumulusnetworks/crohdad:latest
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/etc/iproute2/rt_tables:/etc/iproute2/rt_tables"
+
+- name: Create a network with options
+  docker_network:
+    name: "custom_network"
+    driver_options:
+      com.docker.network.bridge.name: "docker-customnet"
+      com.docker.network.bridge.enable_icc: 'true'
+      com.docker.network.bridge.enable_ip_masquerade: 'false'
+      com.docker.network.driver.mtu: '9216'
+    ipam_options:
+      subnet: "172.17.{{inventory_hostname[-1:]}}.0/24"
+      gateway: "172.17.{{inventory_hostname[-1:]}}.254"
