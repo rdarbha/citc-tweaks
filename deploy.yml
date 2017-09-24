@@ -5,8 +5,8 @@
       blockinfile:
         dest: /etc/lldpd.d/README.conf
         insertafter: EOF
-      block: |
-        configure system interface pattern eth*,swp*,!eth0
+        block: |
+          configure system interface pattern eth*,swp*,!eth0
       become: yes
     - service:
         name: lldpd
