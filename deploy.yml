@@ -3,7 +3,7 @@
   tasks:
     - name: configure lldpd settings to only listen on non-mgmt ports
       blockinfile:
-        dest: /etc/lldp.d/README.conf
+        dest: /etc/lldpd.d/README.conf
         insertafter: EOF
       block: |
         configure system interface pattern eth*,swp*,!eth0
@@ -18,7 +18,7 @@
   tasks:
     - name: configure lldpd settings to only listen on non-mgmt ports
        blockinfile:
-         dest: /etc/lldp.d/README.conf
+         dest: /etc/lldpd.d/README.conf
          insertafter: EOF
          block: |
            configure system interface pattern eth*,!eth0
