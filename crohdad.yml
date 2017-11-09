@@ -1,0 +1,24 @@
+---
+- hosts: leaf02
+  tasks:
+    - name: Create custom network on leaf02
+      shell: sudo docker network create --driver=bridge --subnet 172.18.2.0/24 --gateway 172.18.2.254 --opt  'com.docker.network.bridge.name=docker-newnet' --opt  'com.docker.network.bridge.enable_icc=true' --opt  'com.docker.network.bridge.enable_ip_masquerade=false' new_network
+      become: yes
+
+- hosts: leaf03
+  tasks:
+    - name: Create custom network on leaf03
+      shell: sudo docker network create --driver=bridge --subnet 172.18.3.0/24 --gateway 172.18.3.254 --opt  'com.docker.network.bridge.name=docker-newnet' --opt  'com.docker.network.bridge.enable_icc=true' --opt  'com.docker.network.bridge.enable_ip_masquerade=false' new_network
+      become: yes
+
+- hosts: leaf03
+  tasks:
+    - name: Create custom network on leaf04
+      shell: sudo docker network create --driver=bridge --subnet 172.18.4.0/24 --gateway 172.18.4.254 --opt  'com.docker.network.bridge.name=docker-newnet' --opt  'com.docker.network.bridge.enable_icc=true' --opt  'com.docker.network.bridge.enable_ip_masquerade=false' new_network
+      become: yes
+
+- hosts: leaf02,leaf03,leaf04
+  tasks:
+    - name: Deploy Crohdad on all compute servers
+      shell: sudo docker run -itd --name=crohdad --privileged --net=host     -v /var/run/docker.sock:/var/run/docker.sock     -v /etc/iproute2/rt_tables:/etc/iproute2/rt_tables     cumulusnetworks/crohdad:latest
+      become: yes
